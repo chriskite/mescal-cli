@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+$: << File.join(File.dirname(__FILE__), '..', 'lib')
+require 'mescal-cli'
+
+config = MescalCli::Config.load('.mescal.json')
+cli = MescalCli::Cli.new(config)
+cli.run!
