@@ -1,6 +1,6 @@
 module MescalCli
   class Task
-    attr_reader :state, :slave_id
+    attr_reader :id, :state, :slave_id
 
     def self.create(client, image, cmd, user)
       resp = client.task.create(image, cmd, user)
