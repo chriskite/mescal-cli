@@ -15,7 +15,7 @@ module MescalCli
     end
 
     def create(image, cmd, user)
-      RestClient.post @base_url, image: image, cmd: cmd, user: user
+      RestClient.post @base_url, image: image, cmd: cmd, port: 22
     end
 
     def get(id)
