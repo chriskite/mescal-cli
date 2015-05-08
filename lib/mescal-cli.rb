@@ -1,6 +1,7 @@
 require 'rubygems'
-require 'bundler/setup'
-Bundler.require(:default)
+require 'rest-client'
+require 'yajl'
+require 'multi_json'
 require 'mescal-cli/config'
 require 'mescal-cli/task'
 require 'mescal-cli/pailer'
