@@ -9,8 +9,9 @@ module MescalCli
       @config = config
       @client = Client.new(config['mescal'])
       @image = config['image']
-      @cmd = config['cmd']
+      @cmd = ARGV[1] || config['cmd']
       @user = Etc.getlogin
+      @sshCmd = config['sshCmd']
     end
 
     def usage
@@ -28,27 +29,30 @@ module MescalCli
       puts "Sending task to Mescal..."
       task = Task.create(@client, @image, @cmd, @user)
       run = true
-      pailer_thread = nil
+      threads = []
+      pailer_started = false
       while(run) do
         sleep(2)
         state = task.state
         task.update!
         if state != task.state
           puts "State: #{task.state}"
-          if task.state != "TASK_PENDING" && pailer_thread.nil?
-            pailer_thread = Thread.new { Pailer.new(task, @config['mescal']).run! }
+          if task.state != "TASK_PENDING" && !pailer_started
+            pailer_started = true
+            ["stdout", "stderr"].each do |std|
+              threads << Thread.new { Pailer.new(task, @config['mescal'], std).run! }
+            end
           end
         end
 
         run = !task.done?
       end
-      puts "Exiting..."
-      sleep(2)
-      pailer_thread.kill if !!pailer_thread
+      sleep(10)
+      threads.each { |t| t.kill }
     end
 
     def ssh
-      task = Task.create(@client, @image, @cmd, @user)
+      task = Task.create(@client, @image, @sshCmd, @user)
       run = true
       while(run) do
         sleep(2)

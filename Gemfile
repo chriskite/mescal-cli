@@ -1,5 +1,3 @@
-source 'https://rubygems.org'
+source "https://rubygems.org"
 
-gem 'rest-client'
-gem 'yajl-ruby'
-gem 'multi_json'
+gemspec

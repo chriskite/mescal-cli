@@ -3,12 +3,12 @@ require 'uri'
 
 module MescalCli
   class Pailer
-    def initialize(task, host)
-      @task, @host = task, host
+    def initialize(task, host, std)
+      @task, @host, @std = task, host, std
     end
 
     def run!
-      uri = URI('http://' + @host + '/outputs/' + @task.id)
+      uri = URI("http://#{@host}/#{@std}/#{@task.id}")
       STDOUT.flush
       Net::HTTP.start(uri.host, uri.port) do |http|
         http.request Net::HTTP::Get.new(uri) do |response|
