@@ -17,10 +17,21 @@ module MescalCli
       obj = MultiJson.load(resp)
       @state = obj['state']
       @slave_id = obj['slaveId']
+      @ports = obj['ports']
     end
 
     def done?
       ['TASK_FINISHED', 'TASK_LOST', 'TASK_FAILED'].include?(@state)
+    end
+
+    def slave_ip
+      resp = @client.slave.get(@slave_id)
+      obj = MultiJson.load(resp)
+      obj['hostname']
+    end
+
+    def ssh_port
+      @ports.find { |p| p[0] == 22 }[1]
     end
   end
 end

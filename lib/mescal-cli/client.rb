@@ -7,6 +7,20 @@ module MescalCli
     def task
       TaskClient.new(@base_url)
     end
+
+    def slave
+      SlaveClient.new(@base_url)
+    end
+  end
+
+  class SlaveClient
+    def initialize(base_url)
+      @base_url = base_url + "slaves"
+    end
+
+    def get(id)
+      RestClient.get "#{@base_url}/#{id}"
+    end
   end
 
   class TaskClient
