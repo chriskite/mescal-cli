@@ -1,15 +1,26 @@
 module MescalCli
   class Task
-    attr_reader :id, :state, :slave_id
+    attr_reader :id, :image, :cmd, :slave_id
+    attr_accessor :state
 
-    def self.create(client, image, cmd, user)
-      resp = client.task.create(image, cmd, user)
+    def self.create(client, image, cmd)
+      resp = client.task.create(image, cmd)
       obj = MultiJson.load(resp)
-      Task.new(client, obj['id'], image, cmd, user)
+      Task.new(client, obj['id'], image, cmd)
     end
 
-    def initialize(client, id, image, cmd, user)
-      @client, @id, @image, @cmd, @user = client, id, image, cmd, user
+    def self.list(client)
+      resp = client.task.list
+      obj = MultiJson.load(resp)
+      obj.map do |jsTask|
+        t = Task.new(nil, jsTask['id'], jsTask['image'], jsTask['cmd'])
+        t.state = jsTask['state']
+        t
+      end
+    end
+
+    def initialize(client, id, image, cmd)
+      @client, @id, @image, @cmd = client, id, image, cmd
     end
 
     def update!
@@ -32,6 +43,10 @@ module MescalCli
 
     def ssh_port
       @ports.find { |p| p[0] == 22 }[1]
+    end
+
+    def to_s
+      "#{@id} #{@image} #{@cmd}"
     end
   end
 end

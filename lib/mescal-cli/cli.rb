@@ -10,7 +10,6 @@ module MescalCli
       @client = Client.new(config['mescal'])
       @image = config['image']
       @cmd = ARGV[1] || config['cmd']
-      @user = Etc.getlogin
       @sshCmd = config['sshCmd']
     end
 
@@ -22,12 +21,17 @@ module MescalCli
       case @mode
       when "run" then run
       when "ssh" then ssh
+      when "list" then list
       end
+    end
+
+    def list
+      tp Task.list(@client), {id: {width: 48}}, :image, :cmd, :state
     end
 
     def run
       puts "Sending task to Mescal..."
-      task = Task.create(@client, @image, @cmd, @user)
+      task = Task.create(@client, @image, @cmd)
       run = true
       threads = []
       pailer_started = false
@@ -52,7 +56,7 @@ module MescalCli
     end
 
     def ssh
-      task = Task.create(@client, @image, @sshCmd, @user)
+      task = Task.create(@client, @image, @sshCmd)
       run = true
       while(run) do
         sleep(2)

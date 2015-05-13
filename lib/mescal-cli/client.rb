@@ -28,12 +28,16 @@ module MescalCli
       @base_url = base_url + "tasks"
     end
 
-    def create(image, cmd, user)
+    def create(image, cmd)
       RestClient.post @base_url, image: image, cmd: cmd, port: 22
     end
 
     def get(id)
       RestClient.get "#{@base_url}/#{id}"
+    end
+
+    def list
+      RestClient.get "#{@base_url}"
     end
   end
 end

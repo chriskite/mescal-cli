@@ -21,6 +21,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake", "~> 10.0"
 
   spec.add_runtime_dependency 'rest-client', '~> 1.8', '>= 1.8.0'
+  spec.add_runtime_dependency 'table_print', '~> 1.5.3', '>= 1.5.3'
   spec.add_runtime_dependency 'yajl-ruby', '~> 1.2', '>= 1.2.1'
   spec.add_runtime_dependency 'multi_json', '~> 1.11', '>= 1.11.0'
 end
