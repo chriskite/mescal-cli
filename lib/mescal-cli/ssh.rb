@@ -9,7 +9,7 @@ module MescalCli
       port = @task.ssh_port
       killer = "#{$0} kill #{@task.id}"
       puts "SSH'ing to root@#{ip}:#{port}"
-      "ssh -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no root@#{ip} -p #{port}; #{killer}"
+      exec "/bin/bash -l -c 'ssh -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no root@#{ip} -p #{port}; #{killer}'"
     end
   end
 end
