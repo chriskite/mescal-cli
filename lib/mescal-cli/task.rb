@@ -3,8 +3,8 @@ module MescalCli
     attr_reader :id, :image, :cmd, :slave_id
     attr_accessor :state
 
-    def self.create(client, image, cmd)
-      resp = client.task.create(image, cmd)
+    def self.create(client, image, cmd, cpus, mem)
+      resp = client.task.create(image, cmd, cpus, mem)
       obj = MultiJson.load(resp)
       Task.new(client, obj['id'], image, cmd)
     end
@@ -16,6 +16,15 @@ module MescalCli
         t = Task.new(nil, jsTask['id'], jsTask['image'], jsTask['cmd'])
         t.state = jsTask['state']
         t
+      end
+    end
+
+    def self.kill(client, id)
+      resp = client.task.kill(id) rescue nil
+      if(resp && obj = MultiJson.load(resp))
+        obj['id']
+      else
+        nil
       end
     end
 
