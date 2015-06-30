@@ -15,7 +15,12 @@ module MescalCli
     end
 
     def usage
-      puts "mescal [run|ssh]"
+      puts <<END
+mescal run [cmd]
+mescal ssh
+mescal list
+mescal kill [id]
+END
     end
 
     def run!
