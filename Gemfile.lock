@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    mescal-cli (0.0.2)
+    mescal-cli (0.2.3)
       multi_json (~> 1.11, >= 1.11.0)
       rest-client (~> 1.8, >= 1.8.0)
       table_print (~> 1.5.3, >= 1.5.3)

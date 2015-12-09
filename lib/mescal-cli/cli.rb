@@ -28,7 +28,7 @@ END
       when "run" then run
       when "ssh" then ssh
       when "list" then list
-      when "kill" then kill
+      when "kill" then kill(ARGV[1])
       end
     end
 
@@ -60,7 +60,10 @@ END
         run = !task.done?
       end
       sleep(10)
-      threads.each { |t| t.kill }
+    rescue Interrupt
+      kill(task.id) if !!task
+    ensure
+      threads.each { |t| t.kill } if !!threads
     end
 
     def ssh
@@ -83,12 +86,11 @@ END
       end
     end
 
-    def kill
-      @id = ARGV[1]
-      if(killed = Task.kill(@client, @id))
+    def kill(id)
+      if(killed = Task.kill(@client, id))
         puts "Killed #{killed}"
       else
-        puts "Failed to kill #{@id}"
+        puts "Failed to kill #{id}"
       end
     end
 
