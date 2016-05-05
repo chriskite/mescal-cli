@@ -28,12 +28,27 @@ END
       when "run" then run
       when "ssh" then ssh
       when "list" then list
+      when "longlist" then longlist
       when "kill" then kill(ARGV[1])
       end
     end
 
     def list
       tp Task.list(@client), {id: {width: 48}}, :image, :cmd, :state
+    end
+    
+    def longlist
+      Task.list(@client).each do |task|
+        str = <<-TASK
+          ---------------------------------------------------------
+               id: #{task.id}
+            image: #{task.image}
+              cmd: #{task.cmd}
+            state: #{task.state}
+          started: #{Time.at(task.started/1000)}
+        TASK
+        puts str.gsub(/^\s{10}/,'')
+      end
     end
 
     def run
