@@ -45,7 +45,7 @@ END
             image: #{task.image}
               cmd: #{task.cmd}
             state: #{task.state}
-          started: #{Time.at(task.started/1000)}
+          started: #{Time.at(task.started/1000) rescue 'unknown'}
         TASK
         puts str.gsub(/^\s{10}/,'')
       end
