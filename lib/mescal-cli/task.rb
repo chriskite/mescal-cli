@@ -28,7 +28,7 @@ module MescalCli
       end
     end
 
-    def initialize(client, id, image, cmd, started)
+    def initialize(client, id, image, cmd, started = nil)
       @client, @id, @image, @cmd, @started = client, id, image, cmd, started
     end
 
